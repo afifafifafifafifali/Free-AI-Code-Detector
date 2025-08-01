@@ -125,7 +125,7 @@
     updateBar(0, '#00cc44'); // start green at 0%
 
     const baseUrl = 'https://text.pollinations.ai/';
-    const instruction = `Print ONLY an integer (0-100) in the first line representing the AI-generated probability percentage.\nThen provide detailed reasoning.\n\nAnalyze this code:\n${code}`;
+    const instruction = `Print ONLY an integer (0-100) in the first line representing the AI-generated probability percentage.\nThen provide detailed reasoning. You will receive mostly competetitive programming problem's soltuion code. So, It will mostly contain graphs, trees, complex math and others .\n\nAnalyze this code:\n${code}`;
     const encodedPrompt = encodeURIComponent(instruction);
     const fullUrl = baseUrl + encodedPrompt;
 
