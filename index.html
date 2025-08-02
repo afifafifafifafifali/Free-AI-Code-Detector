@@ -1,9 +1,11 @@
+<!-- Copyright (C), Afif ALi Saadman -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>AI Code Detector with Probability Bar Developed By Afif Ali Saadman</title>
+  <!-- BOOLSHIT CSS-->
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -48,7 +50,7 @@
     user-select: text;
   }
 
-  /* Explanation text behind the bar */
+  
   .explanation {
     position: absolute;
     top: 1rem;
@@ -62,7 +64,7 @@
     white-space: pre-wrap;
   }
 
-  /* The bar container */
+  
   .probability-bar-wrapper {
     position: relative;
     height: 30px;
@@ -72,7 +74,7 @@
     margin-bottom: 1rem;
   }
 
-  /* The colored bar that fills the width */
+  
   .probability-bar {
     height: 100%;
     width: 0%;
@@ -87,14 +89,14 @@
     user-select: none;
   }
 
-  /* The numeric percent displayed on the bar */
+  
   .probability-bar span {
     pointer-events: none;
   }
 </style>
 </head>
 <body>
-  <h1>AI Code Detector Developed By Afif Ali Saadman</h1>
+  <h1>AI Code Detector Developed By Afif Ali Saadman (FIXED) UNDER TESTING</h1>
   <p>Paste your code below and click "Check AI Probability":</p>
   <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
   <button id="checkBtn">Check AI Probability</button>
@@ -122,10 +124,55 @@
 
     checkBtn.disabled = true;
     explanationText.textContent = 'Checking... please wait.';
-    updateBar(0, '#00cc44'); // start green at 0%
+    updateBar(0, '#00cc44'); 
 
     const baseUrl = 'https://text.pollinations.ai/';
-    const instruction = `Print ONLY an integer (0-100) in the first line representing the AI-generated probability percentage.\nThen provide detailed reasoning. You will receive mostly competetitive programming problem's soltuion code. So, It will mostly contain graphs, trees, complex math and others .\n\nAnalyze this code:\n${code}`;
+
+    // Thak\nks to prompt generator ai for this shit.
+    //const instruction = `Print ONLY an integer (0-100) in the first line representing the AI-generated probability percentage.\nThen provide detailed reasoning. You will receive mostly competetitive programming problem's soltuion code.\n\nAnalyze this code:\n${code}`;
+    const instruction = `
+You are an AI code authenticity evaluator. Analyze the following code and produce:
+
+- On the first line, ONLY an integer (0–100) representing the AI-generated probability.
+- On subsequent lines, provide detailed reasoning.
+
+SCORING RULES (Strict):
+
+1. Competitive Programming Signatures (Strong Human Indicator):
+   - Presence of \`<bits/stdc++.h>\`, \`ios::sync_with_stdio(false)\`, \`cin.tie(nullptr)\`, short variable names (\`i\`, \`n\`, \`cnt\`), type aliases like \`using i64 = long long;\`, raw arrays (\`int cnt[2] {}\`), no comments or docstrings.
+   - Code length < 50 lines.(SOmetimes greater).
+   - Now, In python, fastio, sys, defaultdict shall may be used.
+   - These features confidently limit AI probability to a maximum of **15%**.
+
+2. AI Characteristics (Increase AI Probability):
+   - Verbose comments, extensive docstrings, many helper functions for trivial tasks.
+   - Overly descriptive variable names, excessive input validation, or tutorial-style print statements.
+   - If these appear and CP signatures are absent, increase probability accordingly.
+   - Long, explaining comments.
+   - Overly long code (greater than 100).
+   - Very Very Very cleanly organised code.
+    - If the code is structured like a tutorial or educational material, AI probability should be > 50%.
+
+3. Code Length & Context:
+   - For code ≤ 50 lines with CP signatures, AI probability ≤ 15%.
+   - Longer or tutorial-like code without CP signatures can have AI probability > 50%.
+   - If the code has copyrights comments, decrease the probability by 8% to 10%.
+
+4. Language Specifics:
+   - For C++ contest code matching the above.
+   - For Python contest code, short, terse snippets without docstrings are human-like.
+   - Over-structured Python or verbose Java code raises AI probability.
+   - There can be greater than 50 lines of code in c, python etc. so, decrease the probability by 4% to 6% if the code is greater than 50 lines. Otherwise, no decreasement.
+5. Extras(Reccomended) :
+  If score is 45 or lower, minus that by 9-12. 
+
+Apply these strictly. If the code matches human contest style precisely, output AI probability ≤ 15%.
+
+Now analyze this code:
+${code}
+`;
+
+    
     const encodedPrompt = encodeURIComponent(instruction);
     const fullUrl = baseUrl + encodedPrompt;
 
@@ -140,8 +187,6 @@
         probability = 0;
       }
       const reasoning = lines.slice(1).join('\n').trim();
-
-      // Determine color: green if <50, red if >=50, with smooth gradient in between
       const color = getColor(probability);
       updateBar(probability, color);
       explanationText.textContent = reasoning || '[No explanation provided]';
@@ -153,16 +198,11 @@
       checkBtn.disabled = false;
     }
   });
-
-  // Returns a color between green (0%) and red (100%) based on value
   function getColor(value) {
-    // value 0->green (#00cc44), 50->yellow (#cccc00), 100->red (#cc0000)
     if (value < 50) {
-      // interpolate green to yellow
       const ratio = value / 50;
       return interpolateColor([0, 204, 68], [204, 204, 0], ratio);
     } else {
-      // interpolate yellow to red
       const ratio = (value - 50) / 50;
       return interpolateColor([204, 204, 0], [255, 0, 0], ratio);
 
