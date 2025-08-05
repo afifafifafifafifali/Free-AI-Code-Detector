@@ -95,7 +95,7 @@
 </style>
 </head>
 <body>
-  <h1>AI Code Detector with Probability Bar Developed By Afif Ali Saadman(FIXED #1 ERROR)(TESTING)</h1>
+  <h1>AI Code Detector with Probability Bar Developed By Afif Ali Saadman(FIXED #2 ERROR)(TESTING)</h1>
   <p>Paste your code below and click "Check AI Probability":</p>
   <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
   <button id="checkBtn">Check AI Probability</button>
@@ -127,48 +127,50 @@
 
     const baseUrl = 'https://text.pollinations.ai/';
     //const instruction = `Print ONLY an integer (0-100) in the first line representing the AI-generated probability percentage.\nThen provide detailed reasoning. You will receive mostly competetitive programming problem's soltuion code.\n\nAnalyze this code:\n${code}`;
+
     const instruction = `
 You are an AI code authenticity evaluator. Analyze the following code and produce:
 
-- On the first line, ONLY an integer (0–100) representing the AI-generated probability. 
-- On subsequent lines, provide detailed reasoning.
+- On the first line, ONLY an integer (0–100) representing the AI-generated probability.
+- On subsequent lines, provide detailed reasoning for the score.
 
-SCORING RULES (Strict):
+==========================
+ SCORING RULES (STRICT)
+==========================
 
-1. Competitive Programming Signatures (Strong Human Indicator):
-   - Presence of \`<bits/stdc++.h>\`, \`ios::sync_with_stdio(false)\`, \`cin.tie(nullptr)\`, short variable names (\`i\`, \`n\`, \`cnt\`), type aliases like \`using i64 = long long;\`, raw arrays (\`int cnt[2] {}\`), no comments or docstrings.
-   - You must detect the programming language by yourself.
-   - Code length < 50 lines.(SOmetimes greater).
-   - Now, In python, fastio, sys, defaultdict shall may  be used.
-   - These features confidently limit AI probability to a maximum of **15%**.
+1. Competitive Programming (CP) Signatures (Strong Human Indicator):
+   - Presence of: <bits/stdc++.h>, ios::sync_with_stdio(false), cin.tie(nullptr), short variables (i, n, cnt), type aliases (using i64 = long long;), raw arrays (int cnt[2] {}), etc.
+   - Python equivalents: fast I/O (sys.stdin), defaultdict, concise variable names.
+   - Code length under 50 lines is common, but slightly above is acceptable for humans.
+   - If present, these features limit AI probability to MAX **15%**.
 
-
-2. AI Characteristics (Increase AI Probability):
-   - Verbose comments, extensive docstrings, many helper functions for trivial tasks.
-   - Overly descriptive variable names, excessive input validation, or tutorial-style print statements.
-   - If these appear and CP signatures are absent, increase probability accordingly.
-   - Long, explaining comments.
-   - Overly long code (greater than 100).
-   - Very Very Very cleanly organised code.
-    - If the code is structured like a tutorial or educational material, AI probability should be > 50%.
+2. AI Characteristics (Increase Probability):
+   - Verbose comments, docstrings, or tutorial-like explanations.
+   - Many helper functions for trivial tasks.
+   - Overly descriptive variable names or redundant input validation.
+   - Cleanly structured, over-formatted code with step-by-step clarity (typical AI/tutorial style).
+   - Long explanatory comments or code length > 100 lines push AI probability above **50%**.
 
 3. Code Length & Context:
-   - For code ≤ 50 lines with CP signatures, AI probability ≤ 15%.
-   - Longer or tutorial-like code without CP signatures can have AI probability > 50%.
-   - If the code has copyrights comments, decrease the probability by 8% to 10%.
+   - ≤ 50 lines + CP style → ≤ 15%.
+   - > 50 lines but human-like → reduce probability by **4–6%**.
+   - Tutorial-like code with no CP signatures → increase probability significantly (> 50%).
 
-4. Language Specifics:
-   - For C++ contest code matching the above.
-   - For Python contest code, short, terse snippets without docstrings are human-like.
-   - Over-structured Python or verbose Java code raises AI probability.
-   - There can be greater than 50 lines of code in c, python etc. so, decrease the probability by 4% to 6% if the code is greater than 50 lines. Otherwise, no decreasement.
-5. Extras(Reccomended) :
-  If score is 45 or lower, minus that by 9-12. 
+4. Copyright:
+   - If a copyright or personal signature comment is present (e.g., "© Afif Ali Saadman"), decrease probability by **8–10%**.
 
-Apply these strictly. If the code matches human contest style precisely, output AI probability ≤ 15%.
+5. Final Adjustment:
+   - If raw score ≤ 45, subtract an additional **9–12%** (favoring human).
+
+==========================
+INSTRUCTIONS:
+==========================
+- Detect language automatically.
+- Apply all rules strictly in order.
+- Output ONLY the integer on the first line, followed by reasoning.
 
 Now analyze this code:
-${code}
+\${code}
 `;
 
     
@@ -224,4 +226,5 @@ ${code}
 </script>
 </body>
 </html>
+
 
